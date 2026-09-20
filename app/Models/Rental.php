@@ -2,29 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Rental extends Model
 {
-    use HasFactory;
+    protected $fillable = ['user_id', 'car_id', 'start_date', 'end_date', 'total_cost', 'status'];
 
-    protected $fillable = [
-        'user_id',
-        'car_id',
-        'start_date',
-        'end_date',
-        'total_cost',
-        'status',
-    ];
-
-    // A rental is associated with one car
     public function car()
     {
         return $this->belongsTo(Car::class);
     }
 
-    // A rental is associated with one user
     public function user()
     {
         return $this->belongsTo(User::class);

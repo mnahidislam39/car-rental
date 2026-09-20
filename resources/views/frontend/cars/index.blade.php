@@ -3,52 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Rental - Home</title>
+    <title>Available Cars - Car Rental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ route('home') }}">CarRental</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-brand-nav navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('home') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('cars.index') }}">Cars</a></li>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('cars.index') }}">Cars</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Contact</a></li>
-                </ul>
-                <ul class="navbar-nav ms-auto">
-                    @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('my.bookings') }}">My Bookings</a></li>
-                        @if(auth()->user()->isAdmin())
-                            <li class="nav-item"><a class="nav-link text-warning" href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
-                        @endif
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-link nav-link">Logout</button>
-                            </form>
-                        </li>
-                    @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Sign Up</a></li>
-                    @endauth
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Container -->
-    <div class="container py-5">
-        <h1 class="mb-4 text-center fw-bold">Find Your Ideal Ride</h1>
+    <div class="container py-4">
+        <h2 class="mb-4 fw-bold">Browse All Available Cars</h2>
 
-        <!-- Search & Filter Form -->
-        <div class="card p-4 shadow-sm mb-5">
+        <!-- Filter Form -->
+        <div class="card p-4 shadow-sm mb-4">
             <form action="{{ route('cars.index') }}" method="GET" class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label font-weight-bold">Brand</label>
@@ -69,15 +48,14 @@
                     <input type="number" name="max_price" class="form-control" placeholder="e.g. 150" value="{{ request('max_price') }}">
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filter Cars</button>
+                    <button type="submit" class="btn btn-primary w-100">Apply Filter</button>
                 </div>
             </form>
         </div>
 
-        <!-- Featured Cars Grid -->
-        <h3 class="mb-4">Featured Cars</h3>
+        <!-- Car Listing Grid -->
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            @forelse($featuredCars as $car)
+            @forelse($cars as $car)
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0">
                         <img src="{{ $car->image ? asset('storage/' . $car->image) : 'https://via.placeholder.com/300x200?text=No+Image' }}"
@@ -86,7 +64,7 @@
                              style="height: 200px; width: 100%;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title fw-bold mb-1">{{ $car->name }}</h5>
-                            <p class="card-text text-muted mb-1"><strong>Brand:</strong> {{ $car->brand }}</p>
+                            <p class="card-text text-muted mb-1"><strong>Brand:</strong> {{ $car->brand }} | <strong>Type:</strong> {{ $car->car_type }}</p>
                             <p class="card-text text-primary fs-5 fw-bold mb-3">
                                 ${{ number_format($car->daily_rent_price, 2) }} <small class="fs-6 text-muted">/ day</small>
                             </p>
@@ -96,12 +74,11 @@
                 </div>
             @empty
                 <div class="col-12">
-                    <div class="alert alert-info text-center">No cars available right now.</div>
+                    <div class="alert alert-warning text-center">No cars match your search criteria.</div>
                 </div>
             @endforelse
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

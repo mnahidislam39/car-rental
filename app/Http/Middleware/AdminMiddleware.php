@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 
+
 class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response

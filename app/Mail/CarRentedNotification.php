@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Mail;
 
 use App\Models\Rental;
@@ -7,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RentalConfirmationMail extends Mailable
+class CarRentedNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -21,6 +22,6 @@ class RentalConfirmationMail extends Mailable
     public function build()
     {
         return $this->subject('New Car Rental Confirmation')
-                    ->view('emails.rental_confirmation');
+                    ->view('emails.car_rented');
     }
 }
